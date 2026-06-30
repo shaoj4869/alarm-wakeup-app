@@ -8,7 +8,6 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.PowerManager;
 import android.os.Vibrator;
 import android.view.View;
 import android.view.WindowManager;
@@ -26,26 +25,33 @@ public class AlarmActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_alarm);
 
-        getWindow().addFlags(
-            WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON |
-            WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD |
-            WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
-            WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
-        );
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
-            setShowWhenLocked(true);
-            setTurnScreenOn(true);
+        try {
+            setContentView(R.layout.activity_alarm);
+        } catch (Exception e) {
+            finish();
+            return;
         }
 
-        PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
-        PowerManager.WakeLock wakeLock = powerManager.newWakeLock(
-            PowerManager.PARTIAL_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP,
-            "AlarmWakeup::WakeLock"
-        );
-        wakeLock.acquire(10 * 60 * 1000L);
+        try {
+            getWindow().addFlags(
+                WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON |
+                WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD |
+                WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
+                WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
+            );
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
+            try {
+                setShowWhenLocked(true);
+                setTurnScreenOn(true);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
 
         String sender = getIntent().getStringExtra("sender");
         String message = getIntent().getStringExtra("message");
@@ -73,43 +79,61 @@ public class AlarmActivity extends AppCompatActivity {
     }
 
     private void setupAudio() {
-        audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-        int maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_ALARM);
-        int targetVolume = (int) (maxVolume * 0.4);
-        audioManager.setStreamVolume(AudioManager.STREAM_ALARM, targetVolume, 0);
+        try {
+            audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+            if (audioManager != null) {
+                int maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_ALARM);
+                int targetVolume = (int) (maxVolume * 0.4);
+                audioManager.setStreamVolume(AudioManager.STREAM_ALARM, targetVolume, 0);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void startAlarmSound() {
-        mediaPlayer = MediaPlayer.create(this, R.raw.alarm_sound);
-        if (mediaPlayer != null) {
-            mediaPlayer.setLooping(true);
-            try {
+        try {
+            mediaPlayer = MediaPlayer.create(this, R.raw.alarm_sound);
+            if (mediaPlayer != null) {
+                mediaPlayer.setLooping(true);
                 mediaPlayer.start();
-            } catch (Exception e) {
-                e.printStackTrace();
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
     private void startVibration() {
-        vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-        if (vibrator != null && vibrator.hasVibrator()) {
-            long[] pattern = {0, 1000, 500, 1000};
-            vibrator.vibrate(pattern, 0);
+        try {
+            vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+            if (vibrator != null && vibrator.hasVibrator()) {
+                long[] pattern = {0, 1000, 500, 1000};
+                vibrator.vibrate(pattern, 0);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
     private void stopAlarm() {
-        if (mediaPlayer != null) {
-            mediaPlayer.stop();
-            mediaPlayer.release();
-            mediaPlayer = null;
+        try {
+            if (mediaPlayer != null) {
+                if (mediaPlayer.isPlaying()) {
+                    mediaPlayer.stop();
+                }
+                mediaPlayer.release();
+                mediaPlayer = null;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        if (vibrator != null) {
-            vibrator.cancel();
-        }
-        if (audioManager != null) {
-            audioManager.abandonAudioFocus(null);
+
+        try {
+            if (vibrator != null) {
+                vibrator.cancel();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

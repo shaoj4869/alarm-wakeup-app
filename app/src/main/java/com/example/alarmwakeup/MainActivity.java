@@ -103,8 +103,12 @@ public class MainActivity extends AppCompatActivity {
         });
 
         watchAllCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            watchedNamesInput.setEnabled(!isChecked);
-            watchedKeywordsInput.setEnabled(!isChecked);
+            if (watchedNamesInput != null) {
+                watchedNamesInput.setEnabled(!isChecked);
+            }
+            if (watchedKeywordsInput != null) {
+                watchedKeywordsInput.setEnabled(!isChecked);
+            }
         });
     }
 
@@ -128,11 +132,21 @@ public class MainActivity extends AppCompatActivity {
 
     private void loadSettings() {
         SharedPreferences prefs = getSharedPreferences("AlarmWakeup", Context.MODE_PRIVATE);
-        startHourInput.setText(String.valueOf(prefs.getInt("startHour", 23)));
-        endHourInput.setText(String.valueOf(prefs.getInt("endHour", 6)));
-        watchedNamesInput.setText(prefs.getString("watchedNames", ""));
-        watchedKeywordsInput.setText(prefs.getString("watchedKeywords", ""));
-        watchAllCheckBox.setChecked(prefs.getBoolean("watchAll", false));
+        if (startHourInput != null) {
+            startHourInput.setText(String.valueOf(prefs.getInt("startHour", 23)));
+        }
+        if (endHourInput != null) {
+            endHourInput.setText(String.valueOf(prefs.getInt("endHour", 6)));
+        }
+        if (watchedNamesInput != null) {
+            watchedNamesInput.setText(prefs.getString("watchedNames", ""));
+        }
+        if (watchedKeywordsInput != null) {
+            watchedKeywordsInput.setText(prefs.getString("watchedKeywords", ""));
+        }
+        if (watchAllCheckBox != null) {
+            watchAllCheckBox.setChecked(prefs.getBoolean("watchAll", false));
+        }
     }
 
     private void saveSettings() {
@@ -140,127 +154,163 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = prefs.edit();
 
         try {
-            editor.putInt("startHour", Integer.parseInt(startHourInput.getText().toString()));
-            editor.putInt("endHour", Integer.parseInt(endHourInput.getText().toString()));
+            if (startHourInput != null) {
+                editor.putInt("startHour", Integer.parseInt(startHourInput.getText().toString()));
+            }
+            if (endHourInput != null) {
+                editor.putInt("endHour", Integer.parseInt(endHourInput.getText().toString()));
+            }
         } catch (NumberFormatException e) {
             Toast.makeText(this, "请输入有效的小时数", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        editor.putString("watchedNames", watchedNamesInput.getText().toString());
-        editor.putString("watchedKeywords", watchedKeywordsInput.getText().toString());
-        editor.putBoolean("watchAll", watchAllCheckBox.isChecked());
+        if (watchedNamesInput != null) {
+            editor.putString("watchedNames", watchedNamesInput.getText().toString());
+        }
+        if (watchedKeywordsInput != null) {
+            editor.putString("watchedKeywords", watchedKeywordsInput.getText().toString());
+        }
+        if (watchAllCheckBox != null) {
+            editor.putBoolean("watchAll", watchAllCheckBox.isChecked());
+        }
         editor.apply();
 
         Toast.makeText(this, "设置已保存", Toast.LENGTH_SHORT).show();
     }
 
     private void checkNotificationPermission() {
-        ComponentName cn = new ComponentName(this, NotificationMonitor.class);
-        String flat = Settings.Secure.getString(getContentResolver(), ENABLED_NOTIFICATION_LISTENERS);
-        boolean enabled = flat != null && flat.contains(cn.flattenToString());
+        try {
+            ComponentName cn = new ComponentName(this, NotificationMonitor.class);
+            String flat = Settings.Secure.getString(getContentResolver(), ENABLED_NOTIFICATION_LISTENERS);
+            boolean enabled = flat != null && flat.contains(cn.flattenToString());
 
-        if (!enabled) {
-            new AlertDialog.Builder(this)
-                .setTitle("需要通知权限")
-                .setMessage("请在设置中允许本应用监听通知")
-                .setPositiveButton("前往设置", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        startActivity(new Intent(ACTION_NOTIFICATION_LISTENER_SETTINGS));
-                    }
-                })
-                .setNegativeButton("取消", null)
-                .show();
-        } else {
-            Toast.makeText(this, "通知权限已开启", Toast.LENGTH_SHORT).show();
+            if (!enabled) {
+                new AlertDialog.Builder(this)
+                    .setTitle("需要通知权限")
+                    .setMessage("请在设置中允许本应用监听通知")
+                    .setPositiveButton("前往设置", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            startActivity(new Intent(ACTION_NOTIFICATION_LISTENER_SETTINGS));
+                        }
+                    })
+                    .setNegativeButton("取消", null)
+                    .show();
+            } else {
+                Toast.makeText(this, "通知权限已开启", Toast.LENGTH_SHORT).show();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(this, "检查权限失败", Toast.LENGTH_SHORT).show();
         }
     }
 
     private void startAlarmService() {
-        Intent serviceIntent = new Intent(this, AlarmService.class);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            startForegroundService(serviceIntent);
-        } else {
-            startService(serviceIntent);
+        try {
+            Intent serviceIntent = new Intent(this, AlarmService.class);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                startForegroundService(serviceIntent);
+            } else {
+                startService(serviceIntent);
+            }
+            Toast.makeText(this, "服务已启动", Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(this, "启动服务失败", Toast.LENGTH_SHORT).show();
         }
-        Toast.makeText(this, "服务已启动", Toast.LENGTH_SHORT).show();
     }
 
     private void requestBatteryOptimization() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            Intent intent = new Intent();
-            String packageName = getPackageName();
-            intent.setAction(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
-            intent.setData(android.net.Uri.parse("package:" + packageName));
-            startActivity(intent);
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                Intent intent = new Intent();
+                String packageName = getPackageName();
+                intent.setAction(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
+                intent.setData(android.net.Uri.parse("package:" + packageName));
+                startActivity(intent);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
     private void showAppSelectionDialog() {
-        SharedPreferences prefs = getSharedPreferences("AlarmWakeup", Context.MODE_PRIVATE);
-        Set<String> selectedApps = prefs.getStringSet("watchedApps", new HashSet<>());
+        try {
+            SharedPreferences prefs = getSharedPreferences("AlarmWakeup", Context.MODE_PRIVATE);
+            Set<String> selectedApps = prefs.getStringSet("watchedApps", new HashSet<>());
 
-        List<String> appNames = new ArrayList<>();
-        List<String> appPackages = new ArrayList<>();
+            List<String> appNames = new ArrayList<>();
+            List<String> appPackages = new ArrayList<>();
 
-        for (Map.Entry<String, String> entry : commonApps.entrySet()) {
-            if (isAppInstalled(entry.getKey())) {
-                appPackages.add(entry.getKey());
-                appNames.add(entry.getValue());
+            for (Map.Entry<String, String> entry : commonApps.entrySet()) {
+                if (isAppInstalled(entry.getKey())) {
+                    appPackages.add(entry.getKey());
+                    appNames.add(entry.getValue());
+                }
             }
-        }
 
-        final boolean[] checkedItems = new boolean[appNames.size()];
-        for (int i = 0; i < appNames.size(); i++) {
-            checkedItems[i] = selectedApps.contains(appPackages.get(i));
-        }
+            if (appNames.isEmpty()) {
+                Toast.makeText(this, "未检测到已安装的应用", Toast.LENGTH_SHORT).show();
+                return;
+            }
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("选择要监听的应用");
-        builder.setMultiChoiceItems(appNames.toArray(new String[0]), checkedItems,
-            new DialogInterface.OnMultiChoiceClickListener() {
+            final boolean[] checkedItems = new boolean[appNames.size()];
+            for (int i = 0; i < appNames.size(); i++) {
+                checkedItems[i] = selectedApps.contains(appPackages.get(i));
+            }
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("选择要监听的应用");
+            builder.setMultiChoiceItems(appNames.toArray(new String[0]), checkedItems,
+                new DialogInterface.OnMultiChoiceClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+                        checkedItems[which] = isChecked;
+                    }
+                });
+
+            builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                 @Override
-                public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-                    checkedItems[which] = isChecked;
+                public void onClick(DialogInterface dialog, int which) {
+                    Set<String> newSelectedApps = new HashSet<>();
+                    for (int i = 0; i < checkedItems.length; i++) {
+                        if (checkedItems[i]) {
+                            newSelectedApps.add(appPackages.get(i));
+                        }
+                    }
+
+                    SharedPreferences.Editor editor = prefs.edit();
+                    editor.putStringSet("watchedApps", newSelectedApps);
+                    editor.apply();
+
+                    String selectedNames = "";
+                    for (int i = 0; i < checkedItems.length; i++) {
+                        if (checkedItems[i]) {
+                            if (!selectedNames.isEmpty()) {
+                                selectedNames += ", ";
+                            }
+                            selectedNames += appNames.get(i);
+                        }
+                    }
+
+                    if (selectedNames.isEmpty()) {
+                        selectedNames = "所有应用";
+                    }
+                    if (selectAppsButton != null) {
+                        selectAppsButton.setText("已选: " + selectedNames);
+                    }
+
+                    Toast.makeText(MainActivity.this, "应用选择已保存", Toast.LENGTH_SHORT).show();
                 }
             });
 
-        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Set<String> newSelectedApps = new HashSet<>();
-                for (int i = 0; i < checkedItems.length; i++) {
-                    if (checkedItems[i]) {
-                        newSelectedApps.add(appPackages.get(i));
-                    }
-                }
-
-                SharedPreferences.Editor editor = prefs.edit();
-                editor.putStringSet("watchedApps", newSelectedApps);
-                editor.apply();
-
-                String selectedNames = "";
-                for (int i = 0; i < checkedItems.length; i++) {
-                    if (checkedItems[i]) {
-                        if (!selectedNames.isEmpty()) {
-                            selectedNames += ", ";
-                        }
-                        selectedNames += appNames.get(i);
-                    }
-                }
-
-                if (selectedNames.isEmpty()) {
-                    selectedNames = "所有应用";
-                }
-                selectAppsButton.setText("已选: " + selectedNames);
-
-                Toast.makeText(MainActivity.this, "应用选择已保存", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        builder.setNegativeButton("取消", null);
-        builder.show();
+            builder.setNegativeButton("取消", null);
+            builder.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(this, "显示应用选择失败", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private boolean isAppInstalled(String packageName) {
@@ -280,50 +330,69 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void checkNotificationPermissionStatus() {
-        ComponentName cn = new ComponentName(this, NotificationMonitor.class);
-        String flat = Settings.Secure.getString(getContentResolver(), ENABLED_NOTIFICATION_LISTENERS);
-        boolean enabled = flat != null && flat.contains(cn.flattenToString());
+        try {
+            ComponentName cn = new ComponentName(this, NotificationMonitor.class);
+            String flat = Settings.Secure.getString(getContentResolver(), ENABLED_NOTIFICATION_LISTENERS);
+            boolean enabled = flat != null && flat.contains(cn.flattenToString());
 
-        if (enabled) {
-            checkPermissionButton.setText("✓ 通知权限已开启");
-        } else {
-            checkPermissionButton.setText("点击开启通知权限");
+            if (checkPermissionButton != null) {
+                if (enabled) {
+                    checkPermissionButton.setText("✓ 通知权限已开启");
+                } else {
+                    checkPermissionButton.setText("点击开启通知权限");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
     private void updateSelectedAppsDisplay() {
-        SharedPreferences prefs = getSharedPreferences("AlarmWakeup", Context.MODE_PRIVATE);
-        Set<String> selectedApps = prefs.getStringSet("watchedApps", new HashSet<>());
+        try {
+            SharedPreferences prefs = getSharedPreferences("AlarmWakeup", Context.MODE_PRIVATE);
+            Set<String> selectedApps = prefs.getStringSet("watchedApps", new HashSet<>());
 
-        if (selectedApps.isEmpty()) {
-            selectAppsButton.setText("选择监听应用");
-            return;
-        }
-
-        String selectedNames = "";
-        for (String pkg : selectedApps) {
-            String name = commonApps.get(pkg);
-            if (name != null) {
-                if (!selectedNames.isEmpty()) {
-                    selectedNames += ", ";
-                }
-                selectedNames += name;
+            if (selectAppsButton == null) {
+                return;
             }
-        }
 
-        if (selectedNames.isEmpty()) {
-            selectedNames = "所有应用";
+            if (selectedApps.isEmpty()) {
+                selectAppsButton.setText("选择监听应用");
+                return;
+            }
+
+            String selectedNames = "";
+            for (String pkg : selectedApps) {
+                String name = commonApps.get(pkg);
+                if (name != null) {
+                    if (!selectedNames.isEmpty()) {
+                        selectedNames += ", ";
+                    }
+                    selectedNames += name;
+                }
+            }
+
+            if (selectedNames.isEmpty()) {
+                selectedNames = "所有应用";
+            }
+            selectAppsButton.setText("已选: " + selectedNames);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        selectAppsButton.setText("已选: " + selectedNames);
     }
 
     private void testAlarm() {
-        Intent intent = new Intent(this, AlarmActivity.class);
-        intent.setAction("com.example.alarmwakeup.ALARM_ACTION");
-        intent.putExtra("sender", "测试用户");
-        intent.putExtra("message", "这是一条测试消息，用于验证闹钟唤醒功能");
-        intent.putExtra("package", "com.xingin.xhs");
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
+        try {
+            Intent intent = new Intent(this, AlarmActivity.class);
+            intent.setAction("com.example.alarmwakeup.ALARM_ACTION");
+            intent.putExtra("sender", "测试用户");
+            intent.putExtra("message", "这是一条测试消息，用于验证闹钟唤醒功能");
+            intent.putExtra("package", "com.xingin.xhs");
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(this, "启动测试失败", Toast.LENGTH_SHORT).show();
+        }
     }
 }
