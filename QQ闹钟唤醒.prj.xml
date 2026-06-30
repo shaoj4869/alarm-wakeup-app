@@ -1,0 +1,178 @@
+<project sr="tasker">
+    <name>QQ闹钟唤醒</name>
+    <date>2026-06-30</date>
+    <tasks>
+        <task sr="task">
+            <name>QQ闹钟提醒</name>
+            <date>2026-06-30</date>
+            <actions>
+                <action sr="act" ve="7">
+                    <code>547</code>
+                    <label>变量设置: %ringing = 1</label>
+                    <params>
+                        <param sr="arg0" ve="3">%ringing</param>
+                        <param sr="arg1" ve="3">1</param>
+                        <param sr="arg2" ve="3">0</param>
+                    </params>
+                </action>
+                <action sr="act" ve="7">
+                    <code>128</code>
+                    <label>播放铃声</label>
+                    <params>
+                        <param sr="arg0" ve="3">1</param>
+                        <param sr="arg1" ve="3">AlarmClock</param>
+                        <param sr="arg2" ve="3">0</param>
+                        <param sr="arg3" ve="3">0</param>
+                        <param sr="arg4" ve="3">0</param>
+                        <param sr="arg5" ve="3">0</param>
+                    </params>
+                </action>
+                <action sr="act" ve="7">
+                    <code>127</code>
+                    <label>振动</label>
+                    <params>
+                        <param sr="arg0" ve="3">1000</param>
+                        <param sr="arg1" ve="3">0</param>
+                    </params>
+                </action>
+                <action sr="act" ve="7">
+                    <code>30</code>
+                    <label>等待 0.5秒</label>
+                    <params>
+                        <param sr="arg0" ve="3">0</param>
+                        <param sr="arg1" ve="3">0</param>
+                        <param sr="arg2" ve="3">0</param>
+                        <param sr="arg3" ve="3">500</param>
+                    </params>
+                </action>
+                <action sr="act" ve="7">
+                    <code>127</code>
+                    <label>振动</label>
+                    <params>
+                        <param sr="arg0" ve="3">1000</param>
+                        <param sr="arg1" ve="3">0</param>
+                    </params>
+                </action>
+                <action sr="act" ve="7">
+                    <code>30</code>
+                    <label>等待 0.5秒</label>
+                    <params>
+                        <param sr="arg0" ve="3">0</param>
+                        <param sr="arg1" ve="3">0</param>
+                        <param sr="arg2" ve="3">0</param>
+                        <param sr="arg3" ve="3">500</param>
+                    </params>
+                </action>
+                <action sr="act" ve="7">
+                    <code>170</code>
+                    <label>对话框</label>
+                    <params>
+                        <param sr="arg0" ve="3">⏰ 收到QQ消息</param>
+                        <param sr="arg1" ve="3">点击关闭按钮停止提醒</param>
+                        <param sr="arg2" ve="3">关闭</param>
+                        <param sr="arg3" ve="3"></param>
+                        <param sr="arg4" ve="3"></param>
+                        <param sr="arg5" ve="3">0</param>
+                        <param sr="arg6" ve="3">0</param>
+                        <param sr="arg7" ve="3">0</param>
+                        <param sr="arg8" ve="3">0</param>
+                        <param sr="arg9" ve="3">0</param>
+                        <param sr="arg10" ve="3">0</param>
+                        <param sr="arg11" ve="3">1</param>
+                        <param sr="arg12" ve="3">1</param>
+                        <param sr="arg13" ve="3">0</param>
+                        <param sr="arg14" ve="3">0</param>
+                        <param sr="arg15" ve="3">0</param>
+                        <param sr="arg16" ve="3"></param>
+                        <param sr="arg17" ve="3">1</param>
+                        <param sr="arg18" ve="3">关闭提醒</param>
+                        <param sr="arg19" ve="3"></param>
+                    </params>
+                </action>
+            </actions>
+            <exit>no</exit>
+        </task>
+        <task sr="task">
+            <name>关闭提醒</name>
+            <date>2026-06-30</date>
+            <actions>
+                <action sr="act" ve="7">
+                    <code>129</code>
+                    <label>停止铃声</label>
+                    <params>
+                        <param sr="arg0" ve="3">0</param>
+                    </params>
+                </action>
+                <action sr="act" ve="7">
+                    <code>547</code>
+                    <label>变量设置: %ringing = 0</label>
+                    <params>
+                        <param sr="arg0" ve="3">%ringing</param>
+                        <param sr="arg1" ve="3">0</param>
+                        <param sr="arg2" ve="3">0</param>
+                    </params>
+                </action>
+            </actions>
+            <exit>no</exit>
+        </task>
+    </tasks>
+    <profiles>
+        <profile sr="profile">
+            <cdate>2026-06-30</cdate>
+            <edate>2026-06-30</edate>
+            <name>QQ凌晨提醒</name>
+            <active>true</active>
+            <triggers>
+                <trigger sr="trigger">
+                    <type>1</type>
+                    <event sr="event">
+                        <code>57</code>
+                        <label>通知</label>
+                        <params>
+                            <param sr="arg0" ve="3">com.tencent.mobileqq</param>
+                            <param sr="arg1" ve="3"></param>
+                            <param sr="arg2" ve="3"></param>
+                            <param sr="arg3" ve="3">0</param>
+                            <param sr="arg4" ve="3">0</param>
+                            <param sr="arg5" ve="3">0</param>
+                            <param sr="arg6" ve="3">0</param>
+                            <param sr="arg7" ve="3">0</param>
+                            <param sr="arg8" ve="3">0</param>
+                            <param sr="arg9" ve="3">0</param>
+                            <param sr="arg10" ve="3">0</param>
+                            <param sr="arg11" ve="3">0</param>
+                            <param sr="arg12" ve="3">0</param>
+                            <param sr="arg13" ve="3">0</param>
+                            <param sr="arg14" ve="3">0</param>
+                            <param sr="arg15" ve="3">0</param>
+                            <param sr="arg16" ve="3">0</param>
+                            <param sr="arg17" ve="3">0</param>
+                            <param sr="arg18" ve="3">0</param>
+                        </params>
+                    </event>
+                </trigger>
+                <trigger sr="trigger">
+                    <type>2</type>
+                    <state sr="state">
+                        <code>24</code>
+                        <label>时间</label>
+                        <params>
+                            <param sr="arg0" ve="3">1</param>
+                            <param sr="arg1" ve="3">23:00</param>
+                            <param sr="arg2" ve="3">06:00</param>
+                            <param sr="arg3" ve="3">0</param>
+                            <param sr="arg4" ve="3">0</param>
+                            <param sr="arg5" ve="3">0</param>
+                            <param sr="arg6" ve="3">0</param>
+                            <param sr="arg7" ve="3">0</param>
+                        </params>
+                    </state>
+                </trigger>
+            </triggers>
+            <entry sr="task">
+                <id>1</id>
+                <name>QQ闹钟提醒</name>
+            </entry>
+        </profile>
+    </profiles>
+</project>

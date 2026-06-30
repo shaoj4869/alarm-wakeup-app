@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:background="#ff6b6b">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="⏰"
+        android:textSize="120sp"
+        android:layout_marginBottom="32dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="收到重要消息!"
+        android:textSize="32sp"
+        android:textColor="#fff"
+        android:textStyle="bold"
+        android:layout_marginBottom="24dp"/>
+
+    <TextView
+        android:id="@+id/sender_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="来自: 未知"
+        android:textSize="24sp"
+        android:textColor="#fff"
+        android:layout_marginBottom="12dp"/>
+
+    <TextView
+        android:id="@+id/message_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="消息: "
+        android:textSize="20sp"
+        android:textColor="#fff"
+        android:maxLines="3"
+        android:layout_marginBottom="48dp"
+        android:paddingLeft="24dp"
+        android:paddingRight="24dp"/>
+
+    <Button
+        android:id="@+id/dismiss_button"
+        android:layout_width="240dp"
+        android:layout_height="72dp"
+        android:text="关闭"
+        android:textSize="24sp"
+        android:textColor="#ff6b6b"
+        android:background="#fff"
+        android:padding="16dp"/>
+
+</LinearLayout>

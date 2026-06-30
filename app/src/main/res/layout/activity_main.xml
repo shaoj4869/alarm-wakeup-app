@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="#f5f5f5">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="闹钟唤醒"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="#333"
+        android:layout_marginBottom="16dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="设置凌晨时段（小时）"
+        android:textSize="16sp"
+        android:textColor="#666"
+        android:layout_marginTop="8dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="8dp">
+
+        <EditText
+            android:id="@+id/start_hour"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="开始时间（如23）"
+            android:inputType="number"
+            android:maxLength="2"
+            android:background="#fff"
+            android:padding="8dp"
+            android:textSize="16sp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" 至 "
+            android:textSize="16sp"
+            android:layout_gravity="center"/>
+
+        <EditText
+            android:id="@+id/end_hour"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="结束时间（如6）"
+            android:inputType="number"
+            android:maxLength="2"
+            android:background="#fff"
+            android:padding="8dp"
+            android:textSize="16sp"/>
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="关注的联系人（逗号分隔）"
+        android:textSize="16sp"
+        android:textColor="#666"
+        android:layout_marginTop="16dp"/>
+
+    <EditText
+        android:id="@+id/watched_names"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="如：张三,李四"
+        android:background="#fff"
+        android:padding="8dp"
+        android:textSize="16sp"
+        android:layout_marginTop="8dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="关注的关键词（逗号分隔）"
+        android:textSize="16sp"
+        android:textColor="#666"
+        android:layout_marginTop="16dp"/>
+
+    <EditText
+        android:id="@+id/watched_keywords"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="如：紧急,重要"
+        android:background="#fff"
+        android:padding="8dp"
+        android:textSize="16sp"
+        android:layout_marginTop="8dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="选择要监听的应用"
+        android:textSize="16sp"
+        android:textColor="#666"
+        android:layout_marginTop="16dp"/>
+
+    <Button
+        android:id="@+id/select_apps_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="选择监听应用"
+        android:textSize="16sp"
+        android:textColor="#fff"
+        android:background="#fd7e14"
+        android:padding="12dp"
+        android:layout_marginTop="8dp"/>
+
+    <CheckBox
+        android:id="@+id/watch_all"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="监听所有消息"
+        android:textSize="16sp"
+        android:layout_marginTop="16dp"/>
+
+    <Button
+        android:id="@+id/save_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="保存设置"
+        android:textSize="18sp"
+        android:textColor="#fff"
+        android:background="#007bff"
+        android:padding="12dp"
+        android:layout_marginTop="24dp"/>
+
+    <Button
+        android:id="@+id/check_permission_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="点击开启通知权限"
+        android:textSize="18sp"
+        android:textColor="#fff"
+        android:background="#28a745"
+        android:padding="12dp"
+        android:layout_marginTop="12dp"/>
+
+    <Button
+        android:id="@+id/start_service_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="启动服务"
+        android:textSize="18sp"
+        android:textColor="#fff"
+        android:background="#17a2b8"
+        android:padding="12dp"
+        android:layout_marginTop="12dp"/>
+
+    <Button
+        android:id="@+id/test_alarm_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="测试闹钟"
+        android:textSize="18sp"
+        android:textColor="#fff"
+        android:background="#dc3545"
+        android:padding="12dp"
+        android:layout_marginTop="12dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="使用说明：\n1. 设置凌晨时段（如23:00-06:00）\n2. 选择要监听的应用（QQ、微信、小红书等）\n3. 添加关注的联系人或关键词\n4. 开启通知权限\n5. 启动服务\n当凌晨收到关注的消息时，会像闹钟一样持续提醒直到手动关闭"
+        android:textSize="14sp"
+        android:textColor="#999"
+        android:layout_marginTop="24dp"
+        android:lineSpacingExtra="4dp"/>
+
+</LinearLayout>
